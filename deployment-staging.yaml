@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mern-fe
+  namespace: staging
+  labels:
+    app: mern-fe
+spec:
+  selector:
+    matchLabels:
+      app: mern-fe
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mern-fe
+    spec:
+      containers:
+      - name: mern-fe
+        image: agambewe/mern-fe-staging:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mern-fe-service
+  namespace: staging
+spec:
+  type: NodePort
+  selector:
+    app: mern-fe
+  ports:
+  - port: 3000 
+    protocol: "TCP"
