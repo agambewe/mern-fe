@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: mern-fe
-  replicas: 2
+  replicas: 4
   template:
     metadata:
       labels:
@@ -21,7 +21,7 @@ spec:
         imagePullPolicy: Always
         env:
             - name: REACT_APP_BASE_URL
-              value: "https://fe.bewe.tech"
+              value: "https://be.bewe.tech"
         ports:
         - containerPort: 3000
         resources:
