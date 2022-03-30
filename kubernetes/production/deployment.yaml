@@ -1,36 +1,45 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
 metadata:
-  name: mern-fe
-  namespace: production
-  labels:
-    app: mern-fe
+  name: hpa-mern-fe
 spec:
-  selector:
-    matchLabels:
-      app: mern-fe
-  replicas: 4
-  template:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
+      name: mern-fe
+      namespace: production
       labels:
         app: mern-fe
     spec:
-      containers:
-      - name: mern-fe
-        image: agambewe/mern-fe:latest
-        imagePullPolicy: Always
-        env:
-            - name: REACT_APP_BASE_URL
-              value: "https://be.bewe.tech"
-        ports:
-        - containerPort: 3000
-        resources:
-            limits:
-              cpu: 700m
-              memory: 800Mi
-            requests:
-              cpu: 200m
-              memory: 400Mi
+      selector:
+        matchLabels:
+          app: mern-fe
+      replicas: 4
+      template:
+        metadata:
+          labels:
+            app: mern-fe
+        spec:
+          containers:
+          - name: mern-fe
+            image: agambewe/mern-fe:latest
+            imagePullPolicy: Always
+            env:
+                - name: REACT_APP_BASE_URL
+                  value: "https://be.bewe.tech"
+            ports:
+            - containerPort: 3000
+            resources:
+                limits:
+                  cpu: 700m
+                  memory: 800Mi
+                requests:
+                  cpu: 200m
+                  memory: 400Mi
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
 
 ---
 
